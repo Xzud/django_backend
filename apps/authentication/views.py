@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.authentication.serializers import LoginSerializer
+from .services import AuthenticationService
 
 # Create your views here.
 
@@ -34,26 +35,20 @@ def login(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    user = authenticate(request, username=username, password=password)
+    user_details = AuthenticationService.login(
+        request, username=username, password=password
+    )
 
-    if user is None:
+    if user_details is None:
         return Response(
             {"detail": "Invalid credentials."},
             status=status.HTTP_401_UNAUTHORIZED,
         )
-    refresh = RefreshToken.for_user(user)
 
     return Response(
         {
             "message": "Login successful.",
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "role": user.role,
-                "refresh_token": str(refresh),
-                "access_token": str(refresh.access_token),
-            },
+            "user": user_details,
         },
         status=status.HTTP_200_OK,
     )
