@@ -7,18 +7,36 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Attendance',
+            name="Attendance",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('clock_in', models.DateTimeField(blank=True, null=True)),
-                ('clock_out', models.DateTimeField(blank=True, null=True)),
-                ('status', models.CharField(choices=[('present', 'Present'), ('absent', 'Absent'), ('late', 'Late')], default='present', max_length=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                ("clock_in", models.DateTimeField(blank=True, null=True)),
+                ("clock_out", models.DateTimeField(blank=True, null=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("present", "Present"),
+                            ("absent", "Absent"),
+                            ("late", "Late"),
+                        ],
+                        default="present",
+                        max_length=20,
+                    ),
+                ),
             ],
         ),
     ]
