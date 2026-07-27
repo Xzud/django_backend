@@ -23,16 +23,19 @@ from apps.employees.services import EmployeeService
 class EmployeeView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # FIX will be removing service
         self.service = EmployeeService()
 
     def get(self, request, employee_id=None):
         """Get /employees or /employees/{id}"""
         try:
             if employee_id:
+                # FIX will be removing service
                 employee = self.service.fetch_employee_with_relations_by_id(employee_id)
                 serializer = EmployeeSerializer(employee)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
+                # FIX will be removing service
                 employees = self.service.fetch_employees()
                 serializer = EmployeeSerializer(employees, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -40,4 +43,43 @@ class EmployeeView(APIView):
             raise NotFound("Employee not found")
 
     def post(self, request):
-        pass
+        serializer = EmployeeSerializer(data=request.data)
+
+        if serializer.is_valid():
+            employee = serializer.save()
+            return Response(
+                EmployeeSerializer(employee).data, status=status.HTTP_201_CREATED
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, employee_id):
+        # TODO add test
+        employee = Employee.objects.get(id=employee_id)
+
+        serializer = EmployeeSerializer(employee, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, employee_id):
+        # TODO add test
+        employee = Employee.objects.get(id=employee_id)
+
+        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, employee_id):
+        # TODO add test
+        employee = Employee.objects.get(id=employee_id)
+        employee.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

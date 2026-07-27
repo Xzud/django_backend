@@ -40,3 +40,7 @@ class EmployeeTest(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_create_employee(self):
+        #TODO create employee via EmployeeService.create_employee
+        pass

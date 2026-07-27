@@ -3,8 +3,14 @@ import logging
 
 
 class EmployeeService:
+    # FIX this will be removed and focus first on MVC, this is an unnecessary complexity
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
+
+    # NOTE this might be moved to a repository or just leave this here as an internal respository
+    def create_employee(self, **kwargs):
+        """Create an employee"""
+        Employee.objects.create(**kwargs)
 
     def fetch_employees(self):
         """Get all employees"""
