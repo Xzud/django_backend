@@ -55,7 +55,10 @@ class EmployeeView(APIView):
 
     def put(self, request, employee_id):
         # TODO add test
-        employee = Employee.objects.get(id=employee_id)
+        try:
+            employee = Employee.objects.get(id=employee_id)
+        except Employee.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = EmployeeSerializer(employee, data=request.data)
 
