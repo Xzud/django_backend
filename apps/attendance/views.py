@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema
+
 from apps.attendance.serializers import AttendanceSerializer
 from apps.employees.models import Employee
 from .models import Attendance
@@ -63,16 +65,25 @@ class AttendanceClockOutView(GenericAPIView):
 class AttendanceView(GenericAPIView):
     serializer_class = AttendanceSerializer
 
-    def get(self, request, employee_id=None):
+    @extend_schema(operation_id="all_attendance")
+    def get(self, request):
         try:
-            if employee_id:
-                # TODO Check if employee = employee_id is correct
-                attendance = Attendance.objects.get(employee=employee_id)
-                serializer = self.get_serializer(attendance)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                attendances = Attendance.objects.all()
-                serializer = self.get_serializer(attendances, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            attendances = Attendance.objects.all()
+            serializer = self.get_serializer(attendances, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Attendance.DoesNotExist:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AttendanceViewID(GenericAPIView):
+    serializer_class = AttendanceSerializer
+
+    @extend_schema(operation_id="single_attendance")
+    def get(self, request, employee_id):
+        try:
+            attendance = Attendance.objects.get(employee=employee_id)
+            serializer = self.get_serializer(attendance)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Attendance.DoesNotExist:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

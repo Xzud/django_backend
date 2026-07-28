@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 
@@ -20,46 +20,52 @@ from apps.employees.services import EmployeeService
 # DELETE /employees/{id}
 
 
-class EmployeeView(APIView):
+class EmployeeView(GenericAPIView):
+    serializer_class = EmployeeSerializer
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # FIX will be removing service
         self.service = EmployeeService()
 
+    @extend_schema(operation_id="all_employees")
     def get(self, request, employee_id=None):
-        """Get /employees or /employees/{id}"""
+        """Get /employees"""
         try:
             # FIX will be removing service
             employees = self.service.fetch_employees()
-            serializer = EmployeeSerializer(employees, many=True)
+            serializer = self.get_serializer(employees, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Employee.DoesNotExist:
             raise NotFound("Employees not found")
 
     def post(self, request):
-        serializer = EmployeeSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             employee = serializer.save()
             return Response(
-                EmployeeSerializer(employee).data, status=status.HTTP_201_CREATED
+                self.get_serializer(employee).data, status=status.HTTP_201_CREATED
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class EmployeeWithIDView(APIView):
+class EmployeeWithIDView(GenericAPIView):
+    serializer_class = EmployeeSerializer
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # FIX will be removing service
         self.service = EmployeeService()
 
+    @extend_schema(operation_id="single_employee")
     def get(self, request, employee_id):
-        """Get /employees or /employees/{id}"""
+        """Get /employees/{id}"""
         try:
             # FIX will be removing service
             employee = self.service.fetch_employee_with_relations_by_id(employee_id)
-            serializer = EmployeeSerializer(employee)
+            serializer = self.get_serializer(employee)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Employee.DoesNotExist:
             raise NotFound("Employee not found")
@@ -71,7 +77,7 @@ class EmployeeWithIDView(APIView):
         except Employee.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = EmployeeSerializer(employee, data=request.data)
+        serializer = self.get_serializer(employee, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -83,7 +89,7 @@ class EmployeeWithIDView(APIView):
         # TODO add test
         employee = Employee.objects.get(id=employee_id)
 
-        serializer = EmployeeSerializer(employee, data=request.data, partial=True)
+        serializer = self.get_serializer(employee, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()

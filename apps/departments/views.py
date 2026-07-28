@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+
+from drf_spectacular.utils import extend_schema
 
 from apps.departments.models import Department
 from apps.departments.serializers import DepartmentSerializer
@@ -15,11 +17,14 @@ from apps.departments.serializers import DepartmentSerializer
 # DELETE /departments/{id}
 
 
-class DepartmentView(APIView):
+class DepartmentView(GenericAPIView):
+    serializer_class = DepartmentSerializer
+
+    @extend_schema(operation_id="all_departments")
     def get(self, request):
         try:
             departments = Department.objects.all()
-            serializer = DepartmentSerializer(departments, many=True)
+            serializer = self.get_serializer(departments, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Department.DoesNotExist:
             return Response(
@@ -28,23 +33,26 @@ class DepartmentView(APIView):
             )
 
     def post(self, request):
-        serializer = DepartmentSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             department = serializer.save()
             return Response(
-                DepartmentSerializer(department).data, status=status.HTTP_201_CREATED
+                self.get_serializer(department).data, status=status.HTTP_201_CREATED
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DepartmentWithIDView(APIView):
+class DepartmentWithIDView(GenericAPIView):
+    serializer_class = DepartmentSerializer
+
+    @extend_schema(operation_id="single_department")
     def get(self, request, department_id):
         try:
             if department_id:
                 department = Department.objects.get(id=department_id)
-                serializer = DepartmentSerializer(department)
+                serializer = self.get_serializer(department)
                 return Response(serializer.data, status=status.HTTP_200_OK)
         except Department.DoesNotExist:
             return Response(
@@ -55,7 +63,7 @@ class DepartmentWithIDView(APIView):
     def put(self, request, department_id):
         department = Department.objects.get(id=department_id)
 
-        serializer = DepartmentSerializer(department, data=request.data)
+        serializer = self.get_serializer(department, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
