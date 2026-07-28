@@ -2,6 +2,8 @@ from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth import get_user_model
+
+from apps.departments.models import Department
 from .models import Employee
 
 # Create your tests here.
@@ -106,3 +108,18 @@ class EmployeeTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         # TODO add another assertion to check that employees are now empty
+
+    def test_employee_with_department(self):
+        
+        pass
+
+        url = reverse("edit_employee", kwargs={"employee_id": 1})
+
+        department = Department.objects.create(
+            name="IT Department",
+            description="This department handles IT related tasks.",
+        )
+
+        response = self.client.patch(url, {"department": department.id})
+
+        
