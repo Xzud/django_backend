@@ -29,18 +29,12 @@ class EmployeeView(APIView):
     def get(self, request, employee_id=None):
         """Get /employees or /employees/{id}"""
         try:
-            if employee_id:
-                # FIX will be removing service
-                employee = self.service.fetch_employee_with_relations_by_id(employee_id)
-                serializer = EmployeeSerializer(employee)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                # FIX will be removing service
-                employees = self.service.fetch_employees()
-                serializer = EmployeeSerializer(employees, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            # FIX will be removing service
+            employees = self.service.fetch_employees()
+            serializer = EmployeeSerializer(employees, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Employee.DoesNotExist:
-            raise NotFound("Employee not found")
+            raise NotFound("Employees not found")
 
     def post(self, request):
         serializer = EmployeeSerializer(data=request.data)
@@ -52,6 +46,23 @@ class EmployeeView(APIView):
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmployeeWithIDView(APIView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # FIX will be removing service
+        self.service = EmployeeService()
+
+    def get(self, request, employee_id):
+        """Get /employees or /employees/{id}"""
+        try:
+            # FIX will be removing service
+            employee = self.service.fetch_employee_with_relations_by_id(employee_id)
+            serializer = EmployeeSerializer(employee)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Employee.DoesNotExist:
+            raise NotFound("Employee not found")
 
     def put(self, request, employee_id):
         # TODO add test

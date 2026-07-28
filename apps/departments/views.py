@@ -16,22 +16,14 @@ from apps.departments.serializers import DepartmentSerializer
 
 
 class DepartmentView(APIView):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def get(self, request, department_id=None):
+    def get(self, request):
         try:
-            if department_id:
-                department = Department.objects.get(id=department_id)
-                serializer = DepartmentSerializer(department)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                departments = Department.objects.all()
-                serializer = DepartmentSerializer(departments, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            departments = Department.objects.all()
+            serializer = DepartmentSerializer(departments, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Department.DoesNotExist:
             return Response(
-                {"message": "Department does not exist"},
+                serializer.errors,
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -45,6 +37,20 @@ class DepartmentView(APIView):
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DepartmentWithIDView(APIView):
+    def get(self, request, department_id):
+        try:
+            if department_id:
+                department = Department.objects.get(id=department_id)
+                serializer = DepartmentSerializer(department)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except Department.DoesNotExist:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
     def put(self, request, department_id):
         department = Department.objects.get(id=department_id)
