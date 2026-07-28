@@ -14,7 +14,7 @@ from django.db import models
 
 class Attendance(models.Model):
     employee = models.ForeignKey("employees.Employee", on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(null=True)
     clock_in = models.DateTimeField(blank=True, null=True)
     clock_out = models.DateTimeField(blank=True, null=True)
     status = models.CharField(
