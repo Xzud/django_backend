@@ -15,6 +15,8 @@ from django.db import models
 
 
 class EmployeePosition(models.Model):
-    name = models.CharField(min=20, max=100)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     level = models.PositiveIntegerField(default=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

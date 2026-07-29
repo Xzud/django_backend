@@ -39,7 +39,13 @@ class Employee(models.Model):
     phone = models.CharField(max_length=20, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     hire_date = models.DateField()
-    position = models.CharField(max_length=100, blank=True, null=True)
+    position = models.ForeignKey(
+        "positions.EmployeePosition",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="position_employees",
+    )
     status = models.CharField(
         max_length=20,
         choices=[("active", "Active"), ("inactive", "Inactive")],

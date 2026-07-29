@@ -7,6 +7,8 @@
 This will be useful so that only authorized superior has control over
 their subordinates. Ex. Team A supervisor cannot approved leave for
 Team B even if they have higher authority.
+[] - Create middlewares or permission handlings on api endpoints,
+so that appropriate role level access is observed
 [] -
 
 # Others
