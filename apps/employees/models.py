@@ -31,6 +31,8 @@ class Employee(models.Model):
         null=True,
         related_name="employees",
     )
+    # supervisor
+    # team_leader
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)

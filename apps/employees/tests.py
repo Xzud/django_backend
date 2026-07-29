@@ -102,17 +102,15 @@ class EmployeeTest(APITestCase):
 
     def test_delete_employee(self):
         url = reverse("edit_employee", kwargs={"employee_id": 1})
-
         response = self.client.delete(url)
-
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        # TODO add another assertion to check that employees are now empty
+        # Fetch to check that all employees are now gone
+        url = reverse("employees")
+        response = self.client.get(url)
+        self.assertCountEqual(response.data, [])
 
     def test_employee_with_department(self):
-        
-        pass
-
         url = reverse("edit_employee", kwargs={"employee_id": 1})
 
         department = Department.objects.create(
@@ -122,4 +120,5 @@ class EmployeeTest(APITestCase):
 
         response = self.client.patch(url, {"department": department.id})
 
-        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["department"], department.id)
