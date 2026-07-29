@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class EmployeeShiftAssignmentsConfig(AppConfig):
-    name = "apps.employee_shift_assignments"
+    name = "apps.assignments"
+    label = "employee_shift_assignments"

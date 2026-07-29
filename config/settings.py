@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     "apps.positions",
     "apps.shifts",
     "apps.employee_dayoffs",
-    "apps.employee_shift_assignments",
+    "apps.assignments",
 ]
 
 MIDDLEWARE = [
