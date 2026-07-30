@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAuthenticated
 
 from apps.employees.models import Employee
 from apps.employees.serializers import EmployeeSerializer
@@ -22,6 +23,7 @@ from apps.employees.services import EmployeeService
 
 class EmployeeView(GenericAPIView):
     serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

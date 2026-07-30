@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from .models import EmployeePosition
 
 
-class EmployeePositionsSerializer(ModelSerializer):
+class EmployeePositionSerializer(ModelSerializer):
     class Meta:
         model = EmployeePosition
         fields = [

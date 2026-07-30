@@ -1,24 +1,19 @@
 from django.contrib.auth import get_user_model
 
 from django.urls import reverse
-from rest_framework.test import APITestCase
 from rest_framework import status
 
 from apps.departments.models import Department
+from apps.tests import CustomAPITestCase
 
 # Create your tests here.
 
 
-class DepartmentTest(APITestCase):
+class DepartmentTest(CustomAPITestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create(
-            username="testuser",
-            email="test@example.com",
-            password="testpassword123",
-            role="employee",
-        )
+        super().setUp()
 
-        self.department = Department.objects.create(
+        self.employee.department = Department.objects.create(
             name="IT Department",
             description="This department handles IT related tasks.",
         )

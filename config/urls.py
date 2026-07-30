@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/departments/", include("apps.departments.urls")),
     path("api/attendance/", include("apps.attendance.urls")),
     path("api/leave/", include("apps.leave.urls")),
+    path("api/positions/", include("apps.positions.urls")),
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),

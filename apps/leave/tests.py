@@ -7,28 +7,14 @@ from rest_framework.test import APITestCase
 
 from apps.employees.models import Employee
 from apps.leave.models import Leave
+from apps.tests import CustomAPITestCase
 
 # Create your tests here.
 
 
-class LeaveTest(APITestCase):
+class LeaveTest(CustomAPITestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create(
-            username="testuser",
-            email="test@example.com",
-            password="testpass123",
-            role="employee",
-        )
-
-        self.employee = Employee.objects.create(
-            employee_number="EMP001",
-            user=self.user,
-            first_name="John",
-            last_name="Doe",
-            email="john.doe@example.com",
-            hire_date="2024-01-01",
-            status="active",
-        )
+        super().setUp()
 
         self.leave = Leave.objects.create(
             employee=self.employee,

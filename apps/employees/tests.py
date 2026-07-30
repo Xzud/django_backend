@@ -1,9 +1,9 @@
-from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth import get_user_model
 
 from apps.departments.models import Department
+from apps.tests import CustomAPITestCase
 from .models import Employee
 
 # Create your tests here.
@@ -11,26 +11,7 @@ from .models import Employee
 User = get_user_model()
 
 
-class EmployeeTest(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create(
-            username="testuser",
-            email="test@example.com",
-            password="testpass123",
-            role="employee",
-        )
-
-        self.employee = Employee.objects.create(
-            employee_number="EMP001",
-            user=self.user,
-            first_name="John",
-            last_name="Doe",
-            email="john.doe@example.com",
-            hire_date="2024-01-01",
-            status="active",
-        )
-        self.client.force_login(self.user)
-
+class EmployeeTest(CustomAPITestCase):
     def test_fetch_employees(self):
         url = reverse("employees")
         response = self.client.get(url)
@@ -48,7 +29,7 @@ class EmployeeTest(APITestCase):
 
         user = User.objects.create_user(
             username="testuser1",
-            email="testuser@example.com",
+            email="testuser1@example.com",
             password="testuserpassword",
             role="employee",
         )
