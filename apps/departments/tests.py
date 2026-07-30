@@ -18,8 +18,6 @@ class DepartmentTest(CustomAPITestCase):
             description="This department handles IT related tasks.",
         )
 
-        self.client.force_login(self.user)
-
     def test_get_departments(self):
         url = reverse("departments")
 

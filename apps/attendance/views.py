@@ -3,6 +3,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from drf_spectacular.utils import extend_schema
 
@@ -20,6 +21,7 @@ from .models import Attendance
 
 class AttendanceClockInView(GenericAPIView):
     serializer_class = AttendanceSerializer
+    permission_classes = [IsAuthenticated]
 
     # POST /attendance/clock-in OR consider /attendance/{employee_id}/clock_in
     def post(self, request):
@@ -46,6 +48,7 @@ class AttendanceClockInView(GenericAPIView):
 
 class AttendanceClockOutView(GenericAPIView):
     serializer_class = AttendanceSerializer
+    permission_classes = [IsAuthenticated]
 
     # PATCH /attendance/clock-out/{attendance_id}
     def patch(self, request, attendance_id):
@@ -64,6 +67,7 @@ class AttendanceClockOutView(GenericAPIView):
 
 class AttendanceView(GenericAPIView):
     serializer_class = AttendanceSerializer
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(operation_id="all_attendance")
     def get(self, request):
@@ -77,6 +81,7 @@ class AttendanceView(GenericAPIView):
 
 class AttendanceViewID(GenericAPIView):
     serializer_class = AttendanceSerializer
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(operation_id="single_attendance")
     def get(self, request, employee_id):

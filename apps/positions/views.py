@@ -33,6 +33,7 @@ class EmployeePositionlistCreateView(GenericAPIView):
 
 class EmployeePositionDetailView(GenericAPIView):
     serializer_class = EmployeePositionSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, position_id):
         position = get_object_or_404(EmployeePosition, pk=position_id)

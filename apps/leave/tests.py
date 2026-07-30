@@ -24,8 +24,6 @@ class LeaveTest(CustomAPITestCase):
             reason="Fever and severe indigestion.",
         )
 
-        self.client.force_login(self.user)
-
     def test_fetch_leaves(self):
         url = reverse("leaves")
 

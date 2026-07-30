@@ -55,6 +55,7 @@ class EmployeeView(GenericAPIView):
 
 class EmployeeWithIDView(GenericAPIView):
     serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

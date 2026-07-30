@@ -1,33 +1,16 @@
 from django.urls import reverse
-from django.contrib.auth import get_user_model
-
-from django.utils import timezone
 from rest_framework import status
-from rest_framework.test import APITestCase
+
+from apps.tests import CustomAPITestCase
 
 from .models import Attendance
-from apps.employees.models import Employee
 
 # Create your tests here.
 
 
-class Attendancetest(APITestCase):
+class Attendancetest(CustomAPITestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create(
-            username="test",
-            email="text@example.com",
-            password="testpassword123",
-            role="employee",
-        )
-
-        self.employee = Employee.objects.create(
-            employee_number="E0001",
-            user=self.user,
-            first_name="John",
-            last_name="Doe",
-            email=self.user.email,
-            hire_date="2023-04-01",
-        )
+        super().setUp()
 
         self.attendance_now = Attendance.objects.create(
             employee=self.employee,
@@ -37,7 +20,6 @@ class Attendancetest(APITestCase):
             status="present",
         )
 
-        self.client.force_login(self.user)
 
     def test_fetch_attendances(self):
         url = reverse("attendance")

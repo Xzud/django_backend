@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from drf_spectacular.utils import extend_schema
 
@@ -19,6 +20,7 @@ from apps.departments.serializers import DepartmentSerializer
 
 class DepartmentView(GenericAPIView):
     serializer_class = DepartmentSerializer
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(operation_id="all_departments")
     def get(self, request):
@@ -46,6 +48,7 @@ class DepartmentView(GenericAPIView):
 
 class DepartmentWithIDView(GenericAPIView):
     serializer_class = DepartmentSerializer
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(operation_id="single_department")
     def get(self, request, department_id):

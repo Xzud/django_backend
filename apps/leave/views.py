@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from apps.leave.models import Leave
 from .serializers import LeaveSerializer
@@ -17,6 +18,7 @@ from .serializers import LeaveSerializer
 
 class LeaveView(GenericAPIView):
     serializer_class = LeaveSerializer
+    permission_classes = [IsAuthenticated]
     queryset = Leave.objects.all()
 
     def get(self, request):
@@ -37,6 +39,7 @@ class LeaveView(GenericAPIView):
 
 class LeaveWithIDView(GenericAPIView):
     serializer_class = LeaveSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, leave_id):
         leave = Leave.objects.get(id=leave_id)
@@ -46,6 +49,7 @@ class LeaveWithIDView(GenericAPIView):
 class ApproveLeaveView(GenericAPIView):
     # TODO create a logic that only allow superior to approve leave
     serializer_class = LeaveSerializer
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, leave_id):
         leave = Leave.objects.get(id=leave_id)
@@ -65,6 +69,7 @@ class ApproveLeaveView(GenericAPIView):
 class RejectLeaveView(GenericAPIView):
     # TODO create a logic that only allow superior to reject leave
     serializer_class = LeaveSerializer
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, leave_id):
         leave = Leave.objects.get(id=leave_id)
