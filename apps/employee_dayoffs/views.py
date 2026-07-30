@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 
 from .models import EmployeeDayOff
 from .serializers import EmployeeDayOffSerializer
@@ -24,7 +25,9 @@ class EmployeeDayOffView(GenericAPIView):
 
         if serializer.is_valid():
             dayoff = serializer.save()
-            return Response(self.get_serializer(dayoff).data, status=status.HTTP_201_CREATED)
+            return Response(
+                self.get_serializer(dayoff).data, status=status.HTTP_201_CREATED
+            )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

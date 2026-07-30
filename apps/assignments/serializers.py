@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
+from apps.employee_dayoffs.serializers import EmployeeDayOffSerializer
 from apps.employees.serializers import EmployeeSerializer
 from apps.shifts.serializers import EmployeeShiftSerializer
 from .models import EmployeeShiftAssignment
@@ -9,6 +10,7 @@ class EmployeeShiftAssignmentSerializer(ModelSerializer):
     employee = EmployeeSerializer(read_only=True)
     shift = EmployeeShiftSerializer(read_only=True)
     assigned_by = EmployeeSerializer(read_only=True)
+    days_off = EmployeeDayOffSerializer(many=True, read_only=True)
 
     class Meta:
         model = EmployeeShiftAssignment
@@ -18,6 +20,7 @@ class EmployeeShiftAssignmentSerializer(ModelSerializer):
             "effective_from",
             "effective_to",
             "assigned_by",
+            "days_off",
         ]
 
 

@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
@@ -14,5 +15,9 @@ urlpatterns = [
         views.ESA_EditView.as_view(),
         name="edit_assignment",
     ),
-    # /employee/{employee_id}/shift-assignment/ -> current active shift assignment
+    path(
+        "<int:shift_assignment_id>/dayoffs/",
+        views.get_shift_assignment_dayoffs,
+        name="assignment_dayoffs",
+    ),
 ]

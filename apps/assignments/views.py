@@ -86,3 +86,17 @@ from rest_framework.decorators import api_view, permission_classes
 @permission_classes([IsAuthenticated])
 def get_employee_shift(request, employee_id):
     pass
+
+
+# /shift-assignment/{shift_assignment_id}/dayoffs
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_shift_assignment_dayoffs(request, shift_assignment_id):
+    try:
+        assignment_with_dayoffs = EmployeeShiftAssignment.objects.prefetch_related(
+            "days_off"
+        ).get(id=shift_assignment_id)
+        serializer = EmployeeShiftAssignmentSerializer(assignment_with_dayoffs)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except EmployeeShiftAssignment.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
