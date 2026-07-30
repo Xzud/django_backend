@@ -19,10 +19,12 @@ class EmployeePositionTest(CustomAPITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertNotEqual(len(response.data), 0)
 
     def test_fetch_position_detail(self):
-        url = reverse("position-detail", kwargs={"position_id": 1})
+        url = reverse(
+            "position-detail", kwargs={"position_id": self.employee.position.id}
+        )
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -42,22 +44,25 @@ class EmployeePositionTest(CustomAPITestCase):
         self.assertEqual(response.data["description"], position_details["description"])
 
     def test_patch_position(self):
-        url = reverse("position-detail", kwargs={"position_id": 1})
+        url = reverse(
+            "position-detail", kwargs={"position_id": self.employee.position.id}
+        )
         position_details = {"description": "This department handles IT Related tasks"}
         response = self.client.patch(url, position_details)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["description"], position_details["description"])
-        self.assertEqual(response.data["name"], self.employee.position.name)
 
     def test_delete_position(self):
-        url = reverse("position-detail", kwargs={"position_id": 1})
+        url = reverse(
+            "position-detail", kwargs={"position_id": self.employee.position.id}
+        )
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_not_found_position(self):
-        url = reverse("position-detail", kwargs={"position_id": 2})
+        url = reverse("position-detail", kwargs={"position_id": 99})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

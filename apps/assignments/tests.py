@@ -1,12 +1,8 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from apps.employees.models import Employee
-from apps.positions.models import EmployeePosition
 from apps.tests import CustomAPITestCase
 from apps.shifts.models import EmployeeShift, ShiftType
-from .models import EmployeeShiftAssignment
 
 # Create your tests here.
 
@@ -15,37 +11,7 @@ class ESAssignmentTest(CustomAPITestCase):
     def setUp(self):
         super().setUp()
 
-        manager_position = EmployeePosition.objects.create(name="Manager", level="100")
-        ceo_position = EmployeePosition.objects.create(name="CEO", level="1000")
-
-        self.manager = Employee.objects.create(
-            employee_number="EMP002",
-            first_name="Elton",
-            last_name="John",
-            email="elton.john@example.com",
-            hire_date="2022-05-12",
-            status="active",
-            position=manager_position,
-        )
-
-        self.owner = Employee.objects.create(
-            employee_number="EMP000",
-            first_name="Kenny",
-            last_name="Rogers",
-            email="kenny.rogers@example.com",
-            hire_date="2020-01-01",
-            status="active",
-            position=ceo_position,
-        )
-
-        self.first_shift = self.shifts["Morning Shift"]
-
-        self.first_employee_shift_assignment = EmployeeShiftAssignment.objects.create(
-            employee=self.employee,
-            shift=self.first_shift,
-            effective_from="2024-01-01",
-            assigned_by=self.manager,
-        )
+        
 
     def test_fetch_all_assignments(self):
         url = reverse("assignment_list")
@@ -58,9 +24,12 @@ class ESAssignmentTest(CustomAPITestCase):
             response.data[0]["effective_from"],
             self.first_employee_shift_assignment.effective_from,
         )
-        self.assertEqual(response.data[0]["shift"]["name"], self.first_shift.name)
         self.assertEqual(
-            response.data[0]["shift"]["shift_type"], self.first_shift.shift_type
+            response.data[0]["shift"]["name"], self.shifts["Morning Shift"].name
+        )
+        self.assertEqual(
+            response.data[0]["shift"]["shift_type"],
+            self.shifts["Morning Shift"].shift_type,
         )
         self.assertEqual(
             response.data[0]["employee"]["employee_number"],
@@ -80,9 +49,12 @@ class ESAssignmentTest(CustomAPITestCase):
             response.data["effective_from"],
             self.first_employee_shift_assignment.effective_from,
         )
-        self.assertEqual(response.data["shift"]["name"], self.first_shift.name)
         self.assertEqual(
-            response.data["shift"]["shift_type"], self.first_shift.shift_type
+            response.data["shift"]["name"], self.shifts["Morning Shift"].name
+        )
+        self.assertEqual(
+            response.data["shift"]["shift_type"],
+            self.shifts["Morning Shift"].shift_type,
         )
         self.assertEqual(
             response.data["employee"]["employee_number"],
@@ -109,9 +81,12 @@ class ESAssignmentTest(CustomAPITestCase):
             response.data["effective_from"],
             test_assignment_details["effective_from"],
         )
-        self.assertEqual(response.data["shift"]["name"], self.first_shift.name)
         self.assertEqual(
-            response.data["shift"]["shift_type"], self.first_shift.shift_type
+            response.data["shift"]["name"], self.shifts["Morning Shift"].name
+        )
+        self.assertEqual(
+            response.data["shift"]["shift_type"],
+            self.shifts["Morning Shift"].shift_type,
         )
         self.assertEqual(
             response.data["employee"]["employee_number"],

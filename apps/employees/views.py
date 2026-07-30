@@ -31,15 +31,11 @@ class EmployeeView(GenericAPIView):
         self.service = EmployeeService()
 
     @extend_schema(operation_id="all_employees")
-    def get(self, request, employee_id=None):
+    def get(self, request):
         """Get /employees"""
-        try:
-            # FIX will be removing service
-            employees = self.service.fetch_employees()
-            serializer = self.get_serializer(employees, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Employee.DoesNotExist:
-            raise NotFound("Employees not found")
+        employees = self.service.fetch_employees()
+        serializer = self.get_serializer(employees, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)

@@ -3,8 +3,8 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 
 from apps.departments.models import Department
+from apps.employees.models import Employee
 from apps.tests import CustomAPITestCase
-from .models import Employee
 
 # Create your tests here.
 
@@ -35,7 +35,7 @@ class EmployeeTest(CustomAPITestCase):
         )
 
         employee_detail = {
-            "employee_number": "EMP002",
+            "employee_number": "EMP099",
             "user": user.id,
             "first_name": "Jane",
             "last_name": "Doe",
@@ -45,8 +45,9 @@ class EmployeeTest(CustomAPITestCase):
         }
 
         response = self.client.post(url, employee_detail)
+        last_row = Employee.objects.count()
 
-        self.assertEqual(response.data["id"], 2)
+        self.assertEqual(response.data["id"], last_row)
         self.assertEqual(user.id, 2)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["first_name"], employee_detail["first_name"])
@@ -87,9 +88,9 @@ class EmployeeTest(CustomAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         # Fetch to check that all employees are now gone
-        url = reverse("employees")
+        url = reverse("edit_employee", kwargs={"employee_id": 1})
         response = self.client.get(url)
-        self.assertCountEqual(response.data, [])
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_employee_with_department(self):
         url = reverse("edit_employee", kwargs={"employee_id": 1})

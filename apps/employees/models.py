@@ -37,13 +37,6 @@ class Employee(models.Model):
         null=True,
         related_name="employees",
     )
-    shift_assignment = models.ForeignKey(
-        "employee_shift_assignments.EmployeeShiftAssignment",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="shift_employees",
-    )
     # supervisor
     # team_leader
     first_name = models.CharField(max_length=50)
