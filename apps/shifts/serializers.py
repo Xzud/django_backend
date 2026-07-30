@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from .models import EmployeeShift
 
 
-class ShiftSerializer(ModelSerializer):
+class EmployeeShiftSerializer(ModelSerializer):
     class Meta:
         model = EmployeeShift
         fields = [

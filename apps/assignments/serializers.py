@@ -1,13 +1,13 @@
 from rest_framework.serializers import ModelSerializer
 
 from apps.employees.serializers import EmployeeSerializer
-from apps.shifts.serializers import ShiftSerializer
+from apps.shifts.serializers import EmployeeShiftSerializer
 from .models import EmployeeShiftAssignment
 
 
 class EmployeeShiftAssignmentSerializer(ModelSerializer):
     employee = EmployeeSerializer(read_only=True)
-    shift = ShiftSerializer(read_only=True)
+    shift = EmployeeShiftSerializer(read_only=True)
     assigned_by = EmployeeSerializer(read_only=True)
 
     class Meta:

@@ -32,6 +32,7 @@ urlpatterns = [
     path("api/leave/", include("apps.leave.urls")),
     path("api/positions/", include("apps.positions.urls")),
     path("api/shift-assignments/", include("apps.assignments.urls")),
+    path("api/employee-shifts/", include("apps.shifts.urls")),
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),

@@ -10,6 +10,7 @@ Team B even if they have higher authority.
 [] - Create middlewares or permission handlings on api endpoints,
 so that appropriate role level access is observed
 [] - Remap needed endpoints for frontend, so far only basic endpoints are exposed
+[] - Add failure tests
 [] -
 
 # Others

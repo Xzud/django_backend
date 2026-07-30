@@ -38,12 +38,7 @@ class ESAssignmentTest(CustomAPITestCase):
             position=ceo_position,
         )
 
-        self.first_shift = EmployeeShift.objects.create(
-            name="Morning Shift (First Shift)",
-            shift_type=ShiftType.FIXED,
-            start_time="08:00",
-            end_time="17:00",
-        )
+        self.first_shift = self.shifts["Morning Shift"]
 
         self.first_employee_shift_assignment = EmployeeShiftAssignment.objects.create(
             employee=self.employee,
