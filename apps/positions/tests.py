@@ -1,9 +1,7 @@
-from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 from apps.positions.models import EmployeePosition
 from apps.tests import CustomAPITestCase
-
-from rest_framework.test import APITestCase
 
 # Create your tests here.
 
@@ -20,6 +18,46 @@ class EmployeePositionTest(CustomAPITestCase):
         url = reverse("position-list")
         response = self.client.get(url)
 
-        self.assertEqual(self.user.username, "testuser")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
+
+    def test_fetch_position_detail(self):
+        url = reverse("position-detail", kwargs={"position_id": 1})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], self.employee.position.name)
+
+    def test_add_position(self):
+        url = reverse("position-list")
+        position_details = {
+            "name": "HR Department",
+            "description": "This department handles Human Resrouces",
+        }
+
+        response = self.client.post(url, position_details)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["name"], position_details["name"])
+        self.assertEqual(response.data["description"], position_details["description"])
+
+    def test_patch_position(self):
+        url = reverse("position-detail", kwargs={"position_id": 1})
+        position_details = {"description": "This department handles IT Related tasks"}
+        response = self.client.patch(url, position_details)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["description"], position_details["description"])
+        self.assertEqual(response.data["name"], self.employee.position.name)
+
+    def test_delete_position(self):
+        url = reverse("position-detail", kwargs={"position_id": 1})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_not_found_position(self):
+        url = reverse("position-detail", kwargs={"position_id": 2})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
