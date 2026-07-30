@@ -3,7 +3,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 
 from apps.departments.models import Department
-from apps.tests import CustomAPITestCase
+from apps.tests import CustomTestCase
 from .models import Employee
 
 # Create your tests here.
@@ -11,7 +11,7 @@ from .models import Employee
 User = get_user_model()
 
 
-class EmployeeTest(CustomAPITestCase):
+class EmployeeTest(CustomTestCase):
     def test_fetch_employees(self):
         url = reverse("employees")
         response = self.client.get(url)
