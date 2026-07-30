@@ -13,11 +13,13 @@ from django.db import models
 # is_night_shift
 
 
+class ShiftType(models.TextChoices):
+    FIXED = "FIXED", "Fixed Schedule"
+    FLEX_DAILY = "FLEX_DAILY", "Flexible Daily Hours"
+    FLEX_WEEKLY = "FLEX_WEEKLY", "Flexible Weekly Hours"
+
+
 class EmployeeShift(models.Model):
-    class ShiftType(models.TextChoices):
-        FIXED = "FIXED", "Fixed Schedule"
-        FLEX_DAILY = "FLEX_DAILY", "Flexible Daily Hours"
-        FLEX_WEEKLY = "FLEX_WEEKLY", "Flexible Weekly Hours"
 
     name = models.CharField(max_length=50, unique=True)
 

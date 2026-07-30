@@ -13,6 +13,7 @@ class CustomAPITestCase(APITestCase):
             password="testuser123",
             role="employee",
         )
+
         self.employee = Employee.objects.create(
             employee_number="EMP001",
             user=self.user,

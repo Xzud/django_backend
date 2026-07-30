@@ -23,7 +23,13 @@ from django.conf import settings
 
 class Employee(models.Model):
     employee_number = models.CharField(max_length=20, unique=True)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="employee_detail",
+    )
     department = models.ForeignKey(
         "departments.Department",
         on_delete=models.SET_NULL,
