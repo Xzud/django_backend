@@ -6,6 +6,7 @@ class EmployeeShiftSerializer(ModelSerializer):
     class Meta:
         model = EmployeeShift
         fields = [
+            "id",
             "name",
             "shift_type",
             "start_time",

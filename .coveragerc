@@ -4,3 +4,5 @@ omit =
     */tests/*
     */tests.py
     */__init__.py
+    */admin.py
+    */apps.py

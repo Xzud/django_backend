@@ -1,5 +1,7 @@
+from django.db.models import Q
 from django.shortcuts import render
 
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view, permission_classes
@@ -8,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 
+from apps.assignments.models import EmployeeShiftAssignment
+from apps.assignments.serializers import EmployeeShiftAssignmentSerializer
 from apps.employees.models import Employee
 from apps.employees.serializers import EmployeeSerializer
 from apps.employees.services import EmployeeService
@@ -102,3 +106,38 @@ class EmployeeWithIDView(GenericAPIView):
         employee.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# /employee/{employee_id}/shift-assignment/
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_employee_shift(request, employee_id):
+    assignment = EmployeeShiftAssignment.objects.filter(
+        employee_id=employee_id
+    ).order_by("-effective_from")
+    serializer = EmployeeShiftAssignmentSerializer(assignment, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# /employee/{employee_id}/shift-assignment/
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_active_employee_shift(request, employee_id):
+    today = timezone.localdate()
+    # TODO create a service to get the active shift
+    assignment = (
+        EmployeeShiftAssignment.objects.select_related(
+            "employee", "shift", "assigned_by"
+        )
+        .filter(
+            employee_id=employee_id,
+            effective_from__lte=today,
+        )
+        .filter(Q(effective_to__gt=today) | Q(effective_to__isnull=True))
+        .order_by("-effective_from")
+        .first()
+    )
+
+    # NOTE edge case: if there is no assignment specified
+    serializer = EmployeeShiftAssignmentSerializer(assignment)
+    return Response(serializer.data, status=status.HTTP_200_OK)

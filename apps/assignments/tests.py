@@ -1,6 +1,10 @@
+from datetime import timedelta
+
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
+from apps.assignments.models import EmployeeShiftAssignment
 from apps.tests import CustomAPITestCase
 from apps.shifts.models import EmployeeShift, ShiftType
 
@@ -11,15 +15,28 @@ class ESAssignmentTest(CustomAPITestCase):
     def setUp(self):
         super().setUp()
 
-        
+        self.new_shift_assignment = EmployeeShiftAssignment.objects.create(
+            employee=self.employee,
+            shift=self.shifts["Graveyard Shift"],
+            effective_from="2026-06-01",
+            assigned_by=self.manager,
+        )
+
+        self.new_manager_shift_assignment = EmployeeShiftAssignment.objects.create(
+            employee=self.manager,
+            shift=self.shifts["Graveyard Shift"],
+            effective_from="2026-04-01",
+            assigned_by=self.owner,
+        )
 
     def test_fetch_all_assignments(self):
         url = reverse("assignment_list")
 
         response = self.client.get(url)
+        total_assignments = EmployeeShiftAssignment.objects.count()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), total_assignments)
         self.assertEqual(
             response.data[0]["effective_from"],
             self.first_employee_shift_assignment.effective_from,
@@ -125,3 +142,68 @@ class ESAssignmentTest(CustomAPITestCase):
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_employee_assignment_shift(self):
+        url = reverse("employe_shift", kwargs={"employee_id": 1})
+        response = self.client.get(url)
+
+        total_assignments = EmployeeShiftAssignment.objects.filter(
+            employee_id=1
+        ).count()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(total_assignments, 0)
+
+        for item in response.data:
+            self.assertEqual(item["employee"]["id"], self.employee.id)
+
+    def test_employee_active_assignment_shift(self):
+        url = reverse("active_employe_shift", kwargs={"employee_id": 1})
+
+        # Creating a future date
+        future_shift = EmployeeShiftAssignment.objects.create(
+            employee=self.employee,
+            shift=self.shifts["Morning Shift"],
+            effective_from=timezone.localdate() + timedelta(days=30),
+            assigned_by=self.manager,
+        )
+
+        active_shift = EmployeeShiftAssignment.objects.create(
+            employee=self.employee,
+            shift=self.shifts["Morning Shift"],
+            effective_from=timezone.localdate() - timedelta(days=30),
+            assigned_by=self.manager,
+        )
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # assertion to exclude future shift assignments
+        self.assertNotEqual(response.data["id"], future_shift.id)
+        self.assertNotEqual(
+            response.data["effective_from"], future_shift.effective_from
+        )
+
+        # active_shift is valid
+        self.assertEqual(response.data["id"], active_shift.id)
+        self.assertEqual(response.data["shift"]["name"], active_shift.shift.name)
+        self.assertEqual(
+            response.data["effective_from"], active_shift.effective_from.isoformat()
+        )
+        self.assertEqual(response.data["effective_to"], None)
+
+        active_shift.effective_to = timezone.localdate() - timedelta(days=20)
+        active_shift.save()
+
+        # active_shift is expired, must fallback to graveyard shift from setUp
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["id"], self.new_shift_assignment.id)
+        self.assertEqual(
+            response.data["shift"]["name"], self.new_shift_assignment.shift.name
+        )
+        self.assertEqual(
+            response.data["effective_from"], self.new_shift_assignment.effective_from
+        )

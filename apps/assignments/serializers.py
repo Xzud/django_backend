@@ -15,6 +15,7 @@ class EmployeeShiftAssignmentSerializer(ModelSerializer):
     class Meta:
         model = EmployeeShiftAssignment
         fields = [
+            "id",
             "employee",
             "shift",
             "effective_from",

@@ -6,6 +6,7 @@ class EmployeePositionSerializer(ModelSerializer):
     class Meta:
         model = EmployeePosition
         fields = [
+            "id",
             "name",
             "description",
             "level",

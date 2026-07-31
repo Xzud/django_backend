@@ -6,6 +6,7 @@ class EmployeeDayOffSerializer(ModelSerializer):
     class Meta:
         model = EmployeeDayOff
         fields = [
+            "id",
             "assignment",
             "day_of_week",
         ]

@@ -6,8 +6,4 @@ from apps.departments.models import Department
 class DepartmentSerializer(ModelSerializer):
     class Meta:
         model = Department
-        fields=[
-            "name",
-            "description",
-            "manager"
-        ]
+        fields = ["id", "name", "description", "manager"]

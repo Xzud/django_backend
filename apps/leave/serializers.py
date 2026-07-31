@@ -7,6 +7,7 @@ class LeaveSerializer(ModelSerializer):
     class Meta:
         model = Leave
         fields = [
+            "id",
             "employee",
             "type",
             "start_date",
@@ -16,4 +17,3 @@ class LeaveSerializer(ModelSerializer):
             "status",
             "approved_by",
         ]
-

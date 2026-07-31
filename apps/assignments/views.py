@@ -82,12 +82,6 @@ class ESA_EditView(GenericAPIView):
 from rest_framework.decorators import api_view, permission_classes
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def get_employee_shift(request, employee_id):
-    pass
-
-
 # /shift-assignment/{shift_assignment_id}/dayoffs
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
