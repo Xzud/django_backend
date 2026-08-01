@@ -37,7 +37,13 @@ class Employee(models.Model):
         null=True,
         related_name="employees",
     )
-    # supervisor
+    supervisor = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="subordinates",
+    )
     # team_leader
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)

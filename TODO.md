@@ -2,7 +2,7 @@
 
 # Priority
 
-[] - Create schedule plotting logic for attendance
+[X] - Create schedule plotting logic for attendance
 [] - Create team, supervisor, managerial, department employee structure.
 This will be useful so that only authorized superior has control over
 their subordinates. Ex. Team A supervisor cannot approved leave for
