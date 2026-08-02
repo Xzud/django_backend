@@ -27,7 +27,7 @@ class AttendanceClockInView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             employee_id = serializer.data["employee"]
             employee = Employee.objects.get(id=employee_id)
 
@@ -58,7 +58,7 @@ class AttendanceClockOutView(GenericAPIView):
             attendance, data={"clock_out": timezone.now()}, partial=True
         )
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

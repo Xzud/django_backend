@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ApprovalInstancesConfig(AppConfig):
-    name = "approval_instances"
+    name = "apps.approval_instances"

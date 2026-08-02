@@ -26,7 +26,11 @@ from django.db import models
 
 
 class ApprovalStep(models.Model):
-    workflow_id = models.IntegerField()
+    workflow_id = models.ForeignKey(
+        "approval_workflows.ApprovalWorkflow",
+        on_delete=models.CASCADE,
+        related_name="approval_steps",
+    )
     step_order = models.IntegerField()
     name = models.CharField(max_length=255)
     approver_type = models.CharField(max_length=255)

@@ -28,7 +28,7 @@ class LeaveView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             leave = serializer.save()
             return Response(
                 self.get_serializer(leave).data, status=status.HTTP_201_CREATED
@@ -59,7 +59,7 @@ class ApproveLeaveView(GenericAPIView):
             partial=True,
         )
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -79,7 +79,7 @@ class RejectLeaveView(GenericAPIView):
             partial=True,
         )
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

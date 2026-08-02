@@ -37,7 +37,7 @@ class DepartmentView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             department = serializer.save()
             return Response(
                 self.get_serializer(department).data, status=status.HTTP_201_CREATED
@@ -68,7 +68,7 @@ class DepartmentWithIDView(GenericAPIView):
 
         serializer = self.get_serializer(department, data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

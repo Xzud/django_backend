@@ -44,7 +44,7 @@ class EmployeeView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             employee = serializer.save()
             return Response(
                 self.get_serializer(employee).data, status=status.HTTP_201_CREATED
@@ -82,7 +82,7 @@ class EmployeeWithIDView(GenericAPIView):
 
         serializer = self.get_serializer(employee, data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -94,7 +94,7 @@ class EmployeeWithIDView(GenericAPIView):
 
         serializer = self.get_serializer(employee, data=request.data, partial=True)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

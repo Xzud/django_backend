@@ -23,7 +23,7 @@ class EmployeePositionlistCreateView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             position = serializer.save()
             return Response(
                 self.get_serializer(position).data, status=status.HTTP_201_CREATED
@@ -44,7 +44,7 @@ class EmployeePositionDetailView(GenericAPIView):
         position = get_object_or_404(EmployeePosition, pk=position_id)
         serializer = self.get_serializer(position, data=request.data, partial=True)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

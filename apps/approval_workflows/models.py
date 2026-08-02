@@ -30,7 +30,13 @@ class ApprovalWorkflow(models.Model):
         max_length=255, choices=ApprovalWorkflowType.choices
     )
     is_active = models.BooleanField(default=True)
-    created_by_id = models.IntegerField()
+    created_by_id = models.ForeignKey(
+        "employees.Employee",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="created_approval_workflows",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
