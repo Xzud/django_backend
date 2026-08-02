@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ApprovalWorkflowsConfig(AppConfig):
-    name = "approval_workflows"
+    name = "apps.approval_workflows"

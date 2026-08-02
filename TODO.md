@@ -7,6 +7,7 @@
 This will be useful so that only authorized superior has control over
 their subordinates. Ex. Team A supervisor cannot approved leave for
 Team B even if they have higher authority.
+[] - Research authgroup and authpermissions in django
 [] - Create middlewares or permission handlings on api endpoints,
 so that appropriate role level access is observed
 [] - Remap needed endpoints for frontend, so far only basic endpoints are exposed
@@ -17,5 +18,6 @@ so that appropriate role level access is observed
 
 [] - Change Database from sqlite3 to postgresql
 [] - Make employee_id as uuid
-[] - Build RAG for knowledgebase (Maybe separate backend?)
+[] - Build RAG for knowledgebase (different backend)
+[] - Connect ATS with AI integration (diffferent backend)
 [] -
