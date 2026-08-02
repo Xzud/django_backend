@@ -30,6 +30,9 @@ class ApprovalWorkflowView(GenericAPIView):
 
 
 class ApprovalWorkflowDetailView(GenericAPIView):
+    serializer_class = ApprovalWorkflowSerializer
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, workflow_id):
         workflow = get_object_or_404(ApprovalWorkflow, id=workflow_id)
         serializer = ApprovalWorkflowSerializer(workflow)

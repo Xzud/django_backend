@@ -1,10 +1,9 @@
 from rest_framework.serializers import ModelSerializer
+from .models import ApprovalStep
 
-from apps.approval_workflows.models import ApprovalWorkflow
 
-
-class ApprovalWorkflowSerializer(ModelSerializer):
+class ApprovalStepSerializer(ModelSerializer):
     class Meta:
-        model = ApprovalWorkflow
+        model = ApprovalStep
         fields = "__all__"
         exclude = ["created_at", "updated_at"]

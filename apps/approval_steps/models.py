@@ -23,3 +23,39 @@ from django.db import models
 # can_skip
 # created_at
 # updated_at
+
+
+class ApprovalStep(models.Model):
+    workflow_id = models.IntegerField()
+    step_order = models.IntegerField()
+    name = models.CharField(max_length=255)
+    approver_type = models.CharField(max_length=255)
+    supervisor_level = models.IntegerField(blank=True, null=True)
+    department_id = models.ForeignKey(
+        "departments.Department",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="department_approval_steps",
+    )
+    position_id = models.ForeignKey(
+        "positions.Position",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="position_approval_steps",
+    )
+    employee_id = models.ForeignKey(
+        "positions.Position",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="employee_approval_steps",
+    )
+    is_required = models.BooleanField(default=True)
+    can_skip = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
