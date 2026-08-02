@@ -27,6 +27,13 @@ from django.db import models
 
 # TODO continue this with the proper polymporphic relationship for request_content_type_id and request_object_id
 class ApprovalInstance(models.Model):
+    class ApprovalInstanceStatus(models.TextChoices):
+        DRAFT = "DRAFT", "Draft"
+        IN_PROGRESS = "IN_PROGRESS", "In Progress"
+        APPROVED = "APPROVED", "Approved"
+        REJECTED = "REJECTED", "Rejected"
+        CANCELLED = "CANCELLED", "Cancelled"
+
     workflow_id = models.ForeignKey(
         "approval_workflows.ApprovalWorkflow",
         on_delete=models.CASCADE,

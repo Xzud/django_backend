@@ -26,6 +26,13 @@ from django.db import models
 
 
 class ApprovalStep(models.Model):
+    class ApproverType(models.TextChoices):
+        DIRECT_SUPERVISOR = "DIRECT_SUPERVISOR", "Direct Supervisor"
+        SUPERVISOR_LEVEL = "SUPERVISOR_LEVEL", "Supervisor Level"
+        ROLE = "ROLE", "Role"
+        DEPARTMENT_ROLE = "DEPARTMENT_ROLE", "Department Role"
+        SPECIFIC_EMPLOYEE = "SPECIFIC_EMPLOYEE", "Specific Employee"
+
     workflow_id = models.ForeignKey(
         "approval_workflows.ApprovalWorkflow",
         on_delete=models.CASCADE,
@@ -33,7 +40,7 @@ class ApprovalStep(models.Model):
     )
     step_order = models.IntegerField()
     name = models.CharField(max_length=255)
-    approver_type = models.CharField(max_length=255)
+    approver_type = models.CharField(max_length=255, choices=ApproverType.choices)
     supervisor_level = models.IntegerField(blank=True, null=True)
     department_id = models.ForeignKey(
         "departments.Department",

@@ -16,14 +16,13 @@ from django.db import models
 # updated_at
 
 
-class ApprovalWorkflowType(models.TextChoices):
-    LEAVE = "leave", "Leave"
-    PROMOTION = "promotion", "Promotion"
-    PURCHASE = "purchase", "Purchase"
-    OTHER = "other", "Other"
-
-
 class ApprovalWorkflow(models.Model):
+    class ApprovalWorkflowType(models.TextChoices):
+        LEAVE = "leave", "Leave"
+        PROMOTION = "promotion", "Promotion"
+        PURCHASE = "purchase", "Purchase"
+        OTHER = "other", "Other"
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     request_type = models.CharField(
