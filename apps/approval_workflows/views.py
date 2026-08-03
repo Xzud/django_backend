@@ -40,7 +40,7 @@ class ApprovalWorkflowDetailView(GenericAPIView):
         serializer = ApprovalWorkflowSerializer(workflow)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, workflow_id):
+    def patch(self, request, workflow_id):
         workflow = get_object_or_404(ApprovalWorkflow, id=workflow_id)
         serializer = ApprovalWorkflowSerializer(
             workflow, data=request.data, partial=True
