@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "apps.employee_dayoffs",
     "apps.assignments",
     "apps.approval_workflows",
+    "apps.approval_steps",
 ]
 
 MIDDLEWARE = [

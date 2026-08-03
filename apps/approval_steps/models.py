@@ -4,7 +4,7 @@ from django.db import models
 # approval_steps
 # --------------
 # id
-# workflow_id
+# workflow
 # step_order
 # name
 #     (Human-readable label)
@@ -16,9 +16,9 @@ from django.db import models
 #     SPECIFIC_EMPLOYEE
 # )
 # supervisor_level
-# department_id
-# role_id
-# employee_id
+# department
+# position
+# employee
 # is_required
 # can_skip
 # created_at
@@ -33,7 +33,7 @@ class ApprovalStep(models.Model):
         DEPARTMENT_ROLE = "DEPARTMENT_ROLE", "Department Role"
         SPECIFIC_EMPLOYEE = "SPECIFIC_EMPLOYEE", "Specific Employee"
 
-    workflow_id = models.ForeignKey(
+    workflow = models.ForeignKey(
         "approval_workflows.ApprovalWorkflow",
         on_delete=models.CASCADE,
         related_name="approval_steps",
@@ -42,22 +42,22 @@ class ApprovalStep(models.Model):
     name = models.CharField(max_length=255)
     approver_type = models.CharField(max_length=255, choices=ApproverType.choices)
     supervisor_level = models.IntegerField(blank=True, null=True)
-    department_id = models.ForeignKey(
+    department = models.ForeignKey(
         "departments.Department",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name="department_approval_steps",
     )
-    position_id = models.ForeignKey(
-        "positions.Position",
+    position = models.ForeignKey(
+        "positions.EmployeePosition",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name="position_approval_steps",
     )
-    employee_id = models.ForeignKey(
-        "positions.Position",
+    employee = models.ForeignKey(
+        "employees.Employee",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,

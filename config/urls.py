@@ -35,6 +35,7 @@ urlpatterns = [
     path("api/employee-shifts/", include("apps.shifts.urls")),
     path("api/shift-dayoffs/", include("apps.employee_dayoffs.urls")),
     path("api/approval-workflows/", include("apps.approval_workflows.urls")),
+    path("api/workflow-steps/", include("apps.approval_steps.urls")),
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
