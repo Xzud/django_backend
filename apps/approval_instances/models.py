@@ -45,7 +45,7 @@ class ApprovalInstance(models.Model):
     request_object_id = models.PositiveIntegerField()
     request_object = GenericForeignKey("request_content_type", "request_object_id")
 
-    requester_id = models.ForeignKey(
+    requester = models.ForeignKey(
         "employees.Employee",
         on_delete=models.CASCADE,
         related_name="empoyee_approval_instances",

@@ -24,7 +24,7 @@ class ApprovalInstanceView(GenericAPIView):
     def post(self, request):
         serializer = ApprovalInstanceSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(requester_id=request.user.employee_detail.id)
+            serializer.save(requester=request.user.employee_detail)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

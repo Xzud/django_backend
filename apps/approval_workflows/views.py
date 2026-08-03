@@ -25,7 +25,7 @@ class ApprovalWorkflowView(GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(
-                created_by_id=request.user.employee_detail.id
+                created_by=request.user.employee_detail
             )  # TODO check if this is acutally correct
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

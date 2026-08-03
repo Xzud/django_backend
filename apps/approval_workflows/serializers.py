@@ -6,5 +6,4 @@ from apps.approval_workflows.models import ApprovalWorkflow
 class ApprovalWorkflowSerializer(ModelSerializer):
     class Meta:
         model = ApprovalWorkflow
-        fields = "__all__"
         exclude = ["created_at", "updated_at"]

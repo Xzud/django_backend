@@ -29,7 +29,7 @@ class ApprovalWorkflow(models.Model):
         max_length=255, choices=ApprovalWorkflowType.choices
     )
     is_active = models.BooleanField(default=True)
-    created_by_id = models.ForeignKey(
+    created_by = models.ForeignKey(
         "employees.Employee",
         on_delete=models.SET_NULL,
         blank=True,
