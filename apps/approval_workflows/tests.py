@@ -15,7 +15,7 @@ class ApprovalWorkflowsTest(CustomAPITestCase):
         ApprovalWorkflow.objects.create(
             name="Leave Workflow",
             request_type=ApprovalWorkflow.ApprovalWorkflowType.LEAVE,
-            created_by_id=self.owner.id,
+            created_by=self.owner,
         )
 
     def test_get_all_approval_workflows(self):
