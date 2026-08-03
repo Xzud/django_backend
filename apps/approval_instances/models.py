@@ -1,7 +1,7 @@
 from django.db import models
 
-# from django.contrib.contenttypes.fields import GenericForeignKey
-# from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 # approval_instances
@@ -39,16 +39,24 @@ class ApprovalInstance(models.Model):
         on_delete=models.CASCADE,
         related_name="approval_instances",
     )
-    request_content_type_id = models.IntegerField()
-    request_object_id = models.IntegerField()
-    requester_id = models.IntegerField()
+
+    # Polymorphic relationship to different request object types (e.g., LeaveRequest, PromotionRequest, etc.)
+    request_content_type_id = models.IntegerField(ContentType, on_delete=models.CASCADE)
+    request_object_id = models.PositiveIntegerField()
+    request_object = GenericForeignKey("request_content_type", "request_object_id")
+
+    requester_id = models.ForeignKey(
+        "employees.Employee",
+        on_delete=models.CASCADE,
+        related_name="empoyee_approval_instances",
+    )
     status = models.CharField(max_length=255)
     current_step_id = models.ForeignKey(
         "approval_steps.ApprovalStep",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name="current_approval_instances",
+        related_name="step_approval_instances",
     )
     started_at = models.DateTimeField(blank=True, null=True)
     completed_at = models.DateTimeField(blank=True, null=True)
