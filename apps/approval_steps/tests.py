@@ -1,4 +1,5 @@
 from django.urls import reverse
+from urllib.parse import urlencode
 
 from rest_framework import status
 
@@ -21,11 +22,25 @@ class ApprovalStepTest(CustomAPITestCase):
             created_by=self.owner,
         )
 
-        ApprovalStep.objects.create(
+        promotion_workflow = ApprovalWorkflow.objects.create(
+            name="Promotion Workflow",
+            request_type=ApprovalWorkflow.ApprovalWorkflowType.PROMOTION,
+            created_by=self.owner,
+        )
+
+        self.promotion_workflow_step_1 = ApprovalStep.objects.create(
+            workflow=promotion_workflow,
+            step_order=1,
+            name="CEO Promotion Approval",
+            approver_type=ApprovalStep.ApproverType.SPECIFIC_EMPLOYEE,
+            employee=self.owner,
+        )
+
+        self.leave_workflow_step_1 = ApprovalStep.objects.create(
             workflow=leave_workflow,
             step_order=1,
             name="Supervisor Approval Step",
-            approver_type=ApprovalStep.ApproverType.SUPERVISOR_LEVEL,
+            approver_type=ApprovalStep.ApproverType.DIRECT_SUPERVISOR,
             supervisor_level=1,
         )
 
@@ -36,8 +51,13 @@ class ApprovalStepTest(CustomAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_steps_of_workflow(self):
-        # TODO find a way how to test and set urls for a get request with query parameters
-        pass
+        url = reverse("approval_workflow_steps", kwargs={"workflow_id": 1})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        names = [step["name"] for step in response.data]
+        self.assertIn(self.leave_workflow_step_1.name, names)
+        self.assertNotIn(self.promotion_workflow_step_1.name, names)
 
     def test_get_step_from_id(self):
         url = reverse("approval_step_detail", kwargs={"step_id": 1})

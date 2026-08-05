@@ -54,15 +54,7 @@ class ApprovalStepDetailView(GenericAPIView):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_workflow_steps(request):
-    workflow_id = request.GET.get("workflow_id")
-
-    if not workflow_id:
-        return Response(
-            {"message": "missing 'workflow_id' as query parameter."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
+def get_workflow_steps(request, workflow_id):
     steps = ApprovalStep.objects.filter(workflow_id=workflow_id)
     serializer = ApprovalStepSerializer(steps, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
