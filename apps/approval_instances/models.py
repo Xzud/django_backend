@@ -34,14 +34,14 @@ class ApprovalInstance(models.Model):
         REJECTED = "REJECTED", "Rejected"
         CANCELLED = "CANCELLED", "Cancelled"
 
-    workflow_id = models.ForeignKey(
+    workflow = models.ForeignKey(
         "approval_workflows.ApprovalWorkflow",
         on_delete=models.CASCADE,
         related_name="approval_instances",
     )
 
     # Polymorphic relationship to different request object types (e.g., LeaveRequest, PromotionRequest, etc.)
-    request_content_type_id = models.IntegerField(ContentType, on_delete=models.CASCADE)
+    request_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     request_object_id = models.PositiveIntegerField()
     request_object = GenericForeignKey("request_content_type", "request_object_id")
 
@@ -51,7 +51,7 @@ class ApprovalInstance(models.Model):
         related_name="empoyee_approval_instances",
     )
     status = models.CharField(max_length=255)
-    current_step_id = models.ForeignKey(
+    current_step = models.ForeignKey(
         "approval_steps.ApprovalStep",
         on_delete=models.SET_NULL,
         blank=True,

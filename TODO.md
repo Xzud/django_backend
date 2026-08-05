@@ -2,6 +2,7 @@
 
 # Priority
 
+[] - Recheck how to properly implement this when working with approval requests [Approval Instance View](./apps/approval_instances/views.py)
 [X] - Create schedule plotting logic for attendance
 [] - Create team, supervisor, managerial, department employee structure.
 This will be useful so that only authorized superior has control over
