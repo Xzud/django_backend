@@ -10,7 +10,7 @@ from apps.shifts.models import EmployeeShift, ShiftType
 
 class CustomAPITestCase(APITestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create(
+        self.user = get_user_model().objects.create_user(
             username="testuser",
             email="testuser@example.com",
             password="testuser123",
