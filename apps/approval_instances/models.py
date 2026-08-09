@@ -50,7 +50,10 @@ class ApprovalInstance(models.Model):
         on_delete=models.CASCADE,
         related_name="empoyee_approval_instances",
     )
-    status = models.CharField(choices=ApprovalInstanceStatus.choices)
+    status = models.CharField(
+        choices=ApprovalInstanceStatus.choices,
+        default=ApprovalInstanceStatus.IN_PROGRESS,
+    )
     current_step = models.ForeignKey(
         "approval_steps.ApprovalStep",
         on_delete=models.SET_NULL,
@@ -65,3 +68,16 @@ class ApprovalInstance(models.Model):
 
     def __str__(self):
         return f"ApprovalInstance {self.id} - Workflow {self.workflow_id}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["request_content_type", "request_object_id"],
+                name="unique_approval_per_request_object",
+            )
+        ]
+        indexes = [
+            models.Index(
+                fields=["request_content_type", "request_object_id"],
+            )
+        ]

@@ -1,10 +1,8 @@
 from rest_framework.urls import path
 
 from apps.leave.views import (
-    ApproveLeaveView,
     LeaveView,
     LeaveWithIDView,
-    RejectLeaveView,
 )
 
 urlpatterns = [

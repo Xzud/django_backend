@@ -3,7 +3,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import api_view, permission_classes
 
 from apps.leave.models import Leave
 from .serializers import LeaveSerializer
@@ -47,45 +47,10 @@ class LeaveWithIDView(GenericAPIView):
         return Response(self.get_serializer(leave).data, status=status.HTTP_200_OK)
 
 
-# FIX this will be removed, requests will be now go through with approval instances
-class ApproveLeaveView(GenericAPIView):
-    serializer_class = LeaveSerializer
-    permission_classes = [IsAuthenticated]
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_approval_instance(request, leave_id):
+    # Get Leave Object, Get Employee from user
 
-    def patch(self, request, leave_id):
-        leave = Leave.objects.get(id=leave_id)
-        employee = getattr(request.user, "employee_detail", None)
-        if not leave.employee or not employee or leave.employee.supervisor_id != employee.id:
-            raise PermissionDenied("Only the employee's superior can approve this leave.")
-
-        serializer = self.get_serializer(
-            leave,
-            data={"status": "approved", "approved_by": request.user.id},
-            partial=True,
-        )
-
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class RejectLeaveView(GenericAPIView):
-    # TODO create a logic that only allow superior to reject leave
-    serializer_class = LeaveSerializer
-    permission_classes = [IsAuthenticated]
-
-    def patch(self, request, leave_id):
-        leave = Leave.objects.get(id=leave_id)
-        serializer = self.get_serializer(
-            leave,
-            data={"status": "rejected", "approved_by": request.user.id},
-            partial=True,
-        )
-
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Get workflow from request
+    pass

@@ -32,13 +32,13 @@ class ApprovalTask(models.Model):
         REJECTED = "REJECTED", "Rejected"
         SKIPPED = "SKIPPED", "Skipped"
 
-    approval_instance_id = models.ForeignKey(
+    approval_instance = models.ForeignKey(
         "approval_instances.ApprovalInstance", on_delete=models.CASCADE
     )
-    approval_step_id = models.ForeignKey(
+    approval_step = models.ForeignKey(
         "approval_steps.ApprovalStep", on_delete=models.CASCADE
     )
-    approver_id = models.ForeignKey(
+    approver = models.ForeignKey(
         "employees.Employee", on_delete=models.CASCADE, related_name="approved_tasks"
     )
     status = models.CharField(
@@ -48,7 +48,7 @@ class ApprovalTask(models.Model):
     assigned_at = models.DateTimeField(auto_now_add=True)
     acted_at = models.DateTimeField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
-    delegated_from_id = models.ForeignKey(
+    delegated_from = models.ForeignKey(
         "employees.Employee",
         on_delete=models.SET_NULL,
         null=True,
