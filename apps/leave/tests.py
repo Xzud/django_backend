@@ -56,16 +56,3 @@ class LeaveTest(CustomAPITestCase):
         self.assertEqual(response.data["end_date"], leave_details["end_date"])
         self.assertEqual(response.data["reason"], leave_details["reason"])
 
-    def test_approve_leave(self):
-        url = reverse("approve_leave", kwargs={"leave_id": 1})
-        response = self.client.patch(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["status"], "approved")
-
-    def test_reject_leave(self):
-        url = reverse("reject_leave", kwargs={"leave_id": 1})
-        response = self.client.patch(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["status"], "rejected")

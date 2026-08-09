@@ -2,6 +2,7 @@
 
 # Priority
 
+[] - Create a seeder
 [] - Recheck how to properly implement this when working with approval requests [Approval Instance View](./apps/approval_instances/views.py)
 [X] - Create schedule plotting logic for attendance
 [] - Create team, supervisor, managerial, department employee structure.
@@ -13,7 +14,6 @@ Team B even if they have higher authority.
 so that appropriate role level access is observed
 [] - Remap needed endpoints for frontend, so far only basic endpoints are exposed
 [] - Add failure tests
-[] -
 
 # Others
 

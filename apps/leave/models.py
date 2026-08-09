@@ -29,18 +29,5 @@ class Leave(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     reason = models.TextField()
-    status = models.CharField(
-        max_length=100,
-        choices=[("approved", "Approved"), ("rejected", "Rejected")],
-        blank=True,
-        null=True,
-    )
-    approved_by = models.ForeignKey(
-        "employees.Employee",
-        on_delete=models.SET_NULL,
-        related_name="employee_approved",
-        null=True,
-        blank=True,
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

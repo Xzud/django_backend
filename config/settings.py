@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "apps.assignments",
     "apps.approval_workflows",
     "apps.approval_steps",
-    # "apps.approval_instances",
+    "apps.approval_instances",
 ]
 
 MIDDLEWARE = [

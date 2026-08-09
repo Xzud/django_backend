@@ -3,6 +3,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 
 from apps.leave.models import Leave
 from .serializers import LeaveSerializer
@@ -46,13 +47,17 @@ class LeaveWithIDView(GenericAPIView):
         return Response(self.get_serializer(leave).data, status=status.HTTP_200_OK)
 
 
+# FIX this will be removed, requests will be now go through with approval instances
 class ApproveLeaveView(GenericAPIView):
-    # TODO create a logic that only allow superior to approve leave
     serializer_class = LeaveSerializer
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, leave_id):
         leave = Leave.objects.get(id=leave_id)
+        employee = getattr(request.user, "employee_detail", None)
+        if not leave.employee or not employee or leave.employee.supervisor_id != employee.id:
+            raise PermissionDenied("Only the employee's superior can approve this leave.")
+
         serializer = self.get_serializer(
             leave,
             data={"status": "approved", "approved_by": request.user.id},

@@ -50,7 +50,7 @@ class ApprovalInstance(models.Model):
         on_delete=models.CASCADE,
         related_name="empoyee_approval_instances",
     )
-    status = models.CharField(max_length=255)
+    status = models.CharField(choices=ApprovalInstanceStatus.choices)
     current_step = models.ForeignKey(
         "approval_steps.ApprovalStep",
         on_delete=models.SET_NULL,
