@@ -1,21 +1,14 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
+from apps.departments.serializers import DepartmentSerializer
 from apps.employees.models import Employee
+from apps.users.serializers import UserSerializer
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
+class EmployeeSerializer(ModelSerializer):
+    user = UserSerializer(read_only=True)
+    department = DepartmentSerializer(read_only=True)
+
     class Meta:
         model = Employee
-        fields = [
-            "id",
-            "user",
-            "department",
-            "employee_number",
-            "first_name",
-            "last_name",
-            "email",
-            "phone",
-            "department",
-            "hire_date",
-            "status",
-        ]
+        exclude = ["created_at", "updated_at"]

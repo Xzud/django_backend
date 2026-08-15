@@ -27,7 +27,7 @@ from apps.employees.services import EmployeeService
 
 class EmployeeView(GenericAPIView):
     serializer_class = EmployeeSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -37,7 +37,7 @@ class EmployeeView(GenericAPIView):
     @extend_schema(operation_id="all_employees")
     def get(self, request):
         """Get /employees"""
-        employees = self.service.fetch_employees()
+        employees = self.service.fetch_employees_with_relations()
         serializer = self.get_serializer(employees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
