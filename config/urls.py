@@ -21,7 +21,7 @@ from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
 )
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,7 +36,7 @@ urlpatterns = [
     path("api/shift-dayoffs/", include("apps.employee_dayoffs.urls")),
     path("api/approval-workflows/", include("apps.approval_workflows.urls")),
     path("api/workflow-steps/", include("apps.approval_steps.urls")),
-    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path("api/token/", TokenVerifyView.as_view(), name="token_verify_view"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

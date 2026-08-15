@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 
 from drf_spectacular.utils import extend_schema
 
@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.authentication.serializers import LoginSerializer
+from apps.employees.models import Employee
+from apps.employees.serializers import EmployeeSerializer
 from .services import AuthenticationService
 
 # Create your views here.
@@ -16,6 +18,8 @@ from .services import AuthenticationService
 # POST /api/auth/login
 # POST /api/auth/refresh
 # GET  /api/auth/me
+
+User = get_user_model()
 
 
 @extend_schema(request=LoginSerializer, responses={200: dict})
@@ -45,10 +49,19 @@ def login(request):
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
+    print(f"User id: {user_details["id"]}")
+    employee = Employee.objects.select_related("user", "department").get(
+        user_id=user_details["id"]
+    )
+    print(employee)
+    serializer = EmployeeSerializer(employee)
+
     return Response(
         {
             "message": "Login successful.",
-            "user": user_details,
+            "employee": serializer.data,
+            "access_token": user_details["access_token"],
+            "refresh_token": user_details["refresh_token"],
         },
         status=status.HTTP_200_OK,
     )
