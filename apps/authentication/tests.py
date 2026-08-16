@@ -2,18 +2,15 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from rest_framework import status
-from rest_framework.test import APITestCase
+
+from apps.tests import CustomAPITestCase
+
+User = get_user_model()
 
 
-# FIX test cases outdated
-class LoginTests(APITestCase):
+class LoginTests(CustomAPITestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username="testuser",
-            email="test@example.com",
-            password="TestPass123!",
-            role="employee",
-        )
+        super().setUp()
         self.url = reverse("login")
 
     def test_login_success(self):
@@ -21,19 +18,13 @@ class LoginTests(APITestCase):
             self.url,
             {
                 "username": "testuser",
-                "password": "TestPass123!",
+                "password": "testuser123",
             },
             format="json",
         )
 
-        print(response.data)
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["message"], "Login successful.")
-        # self.assertEqual(response.data["user"]["id"], self.user.id)
-        # self.assertEqual(response.data["user"]["username"], "testuser")
-        # self.assertEqual(response.data["user"]["email"], "test@example.com")
-        # self.assertEqual(response.data["user"]["role"], "employee")
 
     def test_login_with_invalid_password(self):
         response = self.client.post(

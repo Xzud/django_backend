@@ -44,9 +44,9 @@ class CustomAPITestCase(APITestCase):
             ),
         }
 
+        # Creates manager position
         manager_position = EmployeePosition.objects.create(name="Manager", level="100")
-        ceo_position = EmployeePosition.objects.create(name="CEO", level="1000")
-
+        # Creates manager employee then assigns the manager position
         self.manager = Employee.objects.create(
             employee_number="EMP002",
             first_name="Elton",
@@ -57,6 +57,9 @@ class CustomAPITestCase(APITestCase):
             position=manager_position,
         )
 
+        # Creates CEO position as the owner
+        ceo_position = EmployeePosition.objects.create(name="CEO", level="1000")
+        # Create the owner/CEO employee then assigns the CEO position
         self.owner = Employee.objects.create(
             employee_number="EMP000",
             first_name="Kenny",

@@ -29,7 +29,7 @@ class Command(BaseCommand):
                     )
 
                     Employee.objects.create(
-                        employee_number=f"EMP00{total_employees + i:05d}",
+                        employee_number=f"EMP{total_employees + i:05d}",
                         user=employee_user,
                         first_name=fake.first_name(),
                         last_name=fake.last_name(),

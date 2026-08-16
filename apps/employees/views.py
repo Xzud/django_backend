@@ -27,11 +27,10 @@ from apps.employees.services import EmployeeService
 
 class EmployeeView(GenericAPIView):
     serializer_class = EmployeeSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # FIX will be removing service
         self.service = EmployeeService()
 
     @extend_schema(operation_id="all_employees")

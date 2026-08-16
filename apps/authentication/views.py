@@ -49,7 +49,6 @@ def login(request):
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
-    print(f"User id: {user_details["id"]}")
     employee = Employee.objects.select_related("user", "department").get(
         user_id=user_details["id"]
     )

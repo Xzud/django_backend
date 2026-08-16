@@ -35,3 +35,7 @@ class EmployeeService:
     def fetch_employee_with_relations_by_id(self, employee_id):
         """Fetch specific employee by id with related user and department infromation"""
         return Employee.objects.select_related("user", "department").get(id=employee_id)
+
+
+def fetch_employees_count():
+    return Employee.objects.count()
