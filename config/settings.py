@@ -84,16 +84,16 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_HEADERS = [
-    'accept',
-    'authorization',  # Essential for Bearer tokens
-    'content-type',
-    'origin',
-    'user-agent',
+    "accept",
+    "authorization",  # Essential for Bearer tokens
+    "content-type",
+    "origin",
+    "user-agent",
 ]
 
 CORS_PREFLIGHT_MAX_AGE = 86400  # 24 hours in seconds
 
-# CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 
 # Only for development testing - never use in production
@@ -174,10 +174,11 @@ AUTH_USER_MODEL = "users.User"
 # Rest Framework
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Optional: global default
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",  # Optional: global default
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }

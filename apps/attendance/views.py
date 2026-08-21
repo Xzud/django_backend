@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 
 from apps.attendance.serializers import AttendanceSerializer
+from apps.attendance.services import attendance_clockin
 from apps.employees.models import Employee
 from .models import Attendance
 
@@ -23,27 +24,12 @@ class AttendanceClockInView(GenericAPIView):
     serializer_class = AttendanceSerializer
     permission_classes = [IsAuthenticated]
 
-    # POST /attendance/clock-in OR consider /attendance/{employee_id}/clock_in
+    # POST /attendance/clock-in
     def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid(raise_exception=True):
-            employee_id = serializer.data["employee"]
-            employee = Employee.objects.get(id=employee_id)
-
-            attendance = Attendance.objects.create(
-                employee=employee,
-                date=timezone.now().date(),
-                clock_in=timezone.now(),
-                status="Present",
-            )
-            attendance.save()
-
-            return Response(
-                self.get_serializer(attendance).data, status=status.HTTP_201_CREATED
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        attendance = attendance_clockin(request.user.id)
+        return Response(
+            self.get_serializer(attendance).data, status=status.HTTP_201_CREATED
+        )
 
 
 class AttendanceClockOutView(GenericAPIView):
@@ -86,8 +72,8 @@ class AttendanceViewID(GenericAPIView):
     @extend_schema(operation_id="single_attendance")
     def get(self, request, employee_id):
         try:
-            attendance = Attendance.objects.get(employee=employee_id)
-            serializer = self.get_serializer(attendance)
+            attendance = Attendance.objects.order_by("-clock_in").filter(employee=employee_id)
+            serializer = self.get_serializer(attendance, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Attendance.DoesNotExist:

@@ -37,5 +37,10 @@ class EmployeeService:
         return Employee.objects.select_related("user", "department").get(id=employee_id)
 
 
+def fetch_employee(**kwargs):
+    """Get a single employee by id"""
+    return Employee.objects.get(**kwargs)
+
+
 def fetch_employees_count():
     return Employee.objects.count()
