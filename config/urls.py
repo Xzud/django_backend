@@ -23,6 +23,8 @@ from drf_spectacular.views import (
 )
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 
+from apps.users.views import verify_auth
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("apps.authentication.urls")),
@@ -36,7 +38,7 @@ urlpatterns = [
     path("api/shift-dayoffs/", include("apps.employee_dayoffs.urls")),
     path("api/approval-workflows/", include("apps.approval_workflows.urls")),
     path("api/workflow-steps/", include("apps.approval_steps.urls")),
-    path("api/token/", TokenVerifyView.as_view(), name="token_verify_view"),
+    path("api/token/", verify_auth, name="token_verify_view"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
