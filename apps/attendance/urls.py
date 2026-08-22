@@ -10,7 +10,7 @@ urlpatterns = [
     path("", view=AttendanceView.as_view(), name="attendance"),
     path("clock-in/", view=AttendanceClockInView.as_view(), name="clock_in"),
     path(
-        "clock-out/<int:attendance_id>/",
+        "clock-out/",
         view=AttendanceClockOutView.as_view(),
         name="clock_out",
     ),

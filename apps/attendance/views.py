@@ -8,7 +8,11 @@ from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 
 from apps.attendance.serializers import AttendanceSerializer
-from apps.attendance.services import attendance_clockin
+from apps.attendance.services import (
+    attendance_clockin,
+    get_all_employee_attendance,
+    get_latest_attendance,
+)
 from apps.employees.models import Employee
 from .models import Attendance
 
@@ -36,9 +40,16 @@ class AttendanceClockOutView(GenericAPIView):
     serializer_class = AttendanceSerializer
     permission_classes = [IsAuthenticated]
 
-    # PATCH /attendance/clock-out/{attendance_id}
-    def patch(self, request, attendance_id):
-        attendance = Attendance.objects.get(id=attendance_id)
+    # POST /attendance/clock-out/
+    def post(self, request):
+
+        employee = request.user.employee_detail
+        attendance = get_latest_attendance(employee.id)
+
+        if attendance.clock_out:
+            return Response(
+                {"message": "Already clocked-out."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         serializer = self.get_serializer(
             attendance, data={"clock_out": timezone.now()}, partial=True
@@ -72,7 +83,7 @@ class AttendanceViewID(GenericAPIView):
     @extend_schema(operation_id="single_attendance")
     def get(self, request, employee_id):
         try:
-            attendance = Attendance.objects.order_by("-clock_in").filter(employee=employee_id)
+            attendance = get_all_employee_attendance(employee_id)
             serializer = self.get_serializer(attendance, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
