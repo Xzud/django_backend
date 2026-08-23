@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+# api/shift-assignments/
 urlpatterns = [
     path("", views.ESA_ListView.as_view(), name="assignment_list"),
     path("create/", views.ESA_CreateView.as_view(), name="create_assignment"),
