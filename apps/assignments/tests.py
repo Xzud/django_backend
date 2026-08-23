@@ -6,7 +6,7 @@ from rest_framework import status
 
 from apps.assignments.models import EmployeeShiftAssignment
 from apps.tests import CustomAPITestCase
-from apps.shifts.models import EmployeeShift, ShiftType
+from apps.shifts.models import EmployeeShift
 
 # Create your tests here.
 
@@ -119,7 +119,7 @@ class ESAssignmentTest(CustomAPITestCase):
 
         second_shift = EmployeeShift.objects.create(
             name="Evening Shift (Second Shift)",
-            shift_type=ShiftType.FIXED,
+            shift_type=EmployeeShift.ShiftType.FIXED,
             start_time="13:00",
             end_time="22:00",
         )

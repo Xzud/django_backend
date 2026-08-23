@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from apps.shifts.models import ShiftType
+from apps.shifts.models import EmployeeShift
 from apps.tests import CustomAPITestCase
 
 # Create your tests here.
@@ -22,7 +22,7 @@ class EmployeeShiftTest(CustomAPITestCase):
         url = reverse("employee_shifts")
         second_shift = {
             "name": "Evening Shift (Second Shift)",
-            "shift_type": ShiftType.FIXED,
+            "shift_type": EmployeeShift.ShiftType.FIXED,
             "start_time": "13:00:00",
             "end_time": "22:00:00",
         }

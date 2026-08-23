@@ -32,13 +32,13 @@ class CustomAPITestCase(APITestCase):
         self.shifts = {
             "Morning Shift": EmployeeShift.objects.create(
                 name="Morning Shift (First Shift)",
-                shift_type=ShiftType.FIXED,
+                shift_type=EmployeeShift.ShiftType.FIXED,
                 start_time="08:00",
                 end_time="17:00",
             ),
             "Graveyard Shift": EmployeeShift.objects.create(
                 name="Graveyard Shift (Third Shift)",
-                shift_type=ShiftType.FIXED,
+                shift_type=EmployeeShift.ShiftType.FIXED,
                 start_time="21:00",
                 end_time="06:00",
             ),
