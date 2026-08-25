@@ -13,7 +13,7 @@ def attendance_clockin(user_id, employee: Employee = None):
     if not employee:
         employee = fetch_employee(user_id=user_id)
 
-    clock_in = timezone.now()
+    clock_in = timezone.localtime()
 
     attendance = get_latest_attendance(employee.id)
     if not attendance.clock_out:
@@ -23,6 +23,10 @@ def attendance_clockin(user_id, employee: Employee = None):
     status = Attendance.Status.PRESENT
 
     if shift.shift_type == EmployeeShift.ShiftType.FIXED:
+        print(f"Shift Start Time: {shift.start_time}")
+        print(f"Shift End Time: {shift.end_time}")
+        print(f"Clock In: {clock_in.time()}")
+        print(f"Clock In TZ: {clock_in.timetz()}")
         if shift.start_time > shift.end_time:
             if clock_in.time() > shift.start_time or clock_in.time() < shift.end_time:
                 status = Attendance.Status.LATE
