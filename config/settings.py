@@ -32,6 +32,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Session expires after 24 hours
+SESSION_COOKIE_AGE = 60 * 60 * 24  # 86400 seconds
+
+# Optional: expire the session when the browser is closed?
+# Keep this False if you want the 24-hour cookie to persist.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 
 # Application definition
 

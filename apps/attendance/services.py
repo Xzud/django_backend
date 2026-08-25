@@ -1,25 +1,40 @@
 from django.utils import timezone
+from datetime import datetime
 
 from apps.employees.models import Employee
 from apps.employees.services import fetch_employee
+from apps.assignments.services import get_active_employee_shift_assignment
+from apps.shifts.models import EmployeeShift
 
 from .models import Attendance
 
 
-def attendance_clockin(user_id, employee=None):
+def attendance_clockin(user_id, employee: Employee = None):
     if not employee:
         employee = fetch_employee(user_id=user_id)
+
+    clock_in = timezone.now()
 
     attendance = get_latest_attendance(employee.id)
     if not attendance.clock_out:
         return attendance
 
-    # TODO check schedule first before creating attendance
+    shift = get_active_employee_shift_assignment(employee.id).shift
+    status = Attendance.Status.PRESENT
+
+    if shift.shift_type == EmployeeShift.ShiftType.FIXED:
+        if shift.start_time > shift.end_time:
+            if clock_in.time() > shift.start_time or clock_in.time() < shift.end_time:
+                status = Attendance.Status.LATE
+        else:
+            if clock_in.time() > shift.start_time and clock_in.time() < shift.end_time:
+                status = Attendance.Status.LATE
+
     attendance = Attendance.objects.create(
         employee=employee,
         date=timezone.now().date(),
-        clock_in=timezone.now(),
-        status="Present",
+        clock_in=clock_in,
+        status=status,
     )
     attendance.save()
 

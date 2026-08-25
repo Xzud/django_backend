@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from apps.assignments.models import EmployeeShiftAssignment
 from apps.employees.models import Employee
 from apps.positions.models import EmployeePosition
-from apps.shifts.models import EmployeeShift, ShiftType
+from apps.shifts.models import EmployeeShift
 
 
 class CustomAPITestCase(APITestCase):

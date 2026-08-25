@@ -4,6 +4,7 @@ from .views import (
     AttendanceView,
     AttendanceClockInView,
     AttendanceViewID,
+    delete_attendance,
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
         view=AttendanceViewID.as_view(),
         name="employee_attendance",
     ),
+    path("<int:attendance_id>/delete/", delete_attendance, name="delete_attendance"),
 ]
