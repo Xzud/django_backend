@@ -17,6 +17,12 @@ so that appropriate role level access is observed
 [] - Remap needed endpoints for frontend, so far only basic endpoints are exposed
 [] - Add failure tests
 
+
+# Note 
+
+    Aug 22
+    - Added basic functional clock-in/clock-out.
+
 # Others
 
 [] - Change Database from sqlite3 to postgresql
