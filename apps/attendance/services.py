@@ -23,10 +23,6 @@ def attendance_clockin(user_id, employee: Employee = None):
     status = Attendance.Status.PRESENT
 
     if shift.shift_type == EmployeeShift.ShiftType.FIXED:
-        print(f"Shift Start Time: {shift.start_time}")
-        print(f"Shift End Time: {shift.end_time}")
-        print(f"Clock In: {clock_in.time()}")
-        print(f"Clock In TZ: {clock_in.timetz()}")
         if shift.start_time > shift.end_time:
             if clock_in.time() > shift.start_time or clock_in.time() < shift.end_time:
                 status = Attendance.Status.LATE

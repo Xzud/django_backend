@@ -41,6 +41,10 @@ class EmployeeView(GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        
+        total_employees = Employee.objects.count()
+        request.data["employee_number"] = f"EMP{total_employees + 1:05d}"
+
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -139,4 +143,11 @@ def get_active_employee_shift(request, employee_id):
 
     # NOTE edge case: if there is no assignment specified
     serializer = EmployeeShiftAssignmentSerializer(assignment)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_all_superiors(request):
+    managers = Employee.objects.filter(position__level__gte=100)
+    serializer = EmployeeSerializer(managers, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

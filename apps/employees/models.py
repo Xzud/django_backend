@@ -56,7 +56,7 @@ class Employee(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name="position_employees",
+        related_name="position_employees",  
     )
     status = models.CharField(
         max_length=20,
