@@ -23,7 +23,7 @@ class ApprovalStepView(GenericAPIView):
 
     def post(self, request):
         serializer = ApprovalStepSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -41,7 +41,7 @@ class ApprovalStepDetailView(GenericAPIView):
     def patch(self, request, step_id):
         step = get_object_or_404(ApprovalStep, id=step_id)
         serializer = ApprovalStepSerializer(step, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

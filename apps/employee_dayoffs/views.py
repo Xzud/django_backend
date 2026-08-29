@@ -23,7 +23,7 @@ class EmployeeDayOffView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             dayoff = serializer.save()
             return Response(
                 self.get_serializer(dayoff).data, status=status.HTTP_201_CREATED

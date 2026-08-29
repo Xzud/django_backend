@@ -23,7 +23,7 @@ class ApprovalWorkflowView(GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save(
                 created_by=request.user.employee_detail
             )  # TODO check if this is acutally correct
@@ -45,7 +45,7 @@ class ApprovalWorkflowDetailView(GenericAPIView):
         serializer = ApprovalWorkflowSerializer(
             workflow, data=request.data, partial=True
         )
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -58,7 +58,7 @@ class AttendanceClockOutView(GenericAPIView):
             attendance, data={"clock_out": timezone.now()}, partial=True
         )
 
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 

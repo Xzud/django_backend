@@ -22,7 +22,7 @@ class ApprovalTaskView(GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -40,7 +40,7 @@ class ApprovalTaskDetailsView(GenericAPIView):
     def patch(self, request, task_id):
         task = get_object_or_404(ApprovalTask, id=task_id)
         serializer = self.get_serializer(task, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
