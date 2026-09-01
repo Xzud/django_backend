@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.authentication.serializers import LoginSerializer
 from apps.employees.models import Employee
-from apps.employees.serializers import EmployeeSerializer
+from apps.employees.serializers.serializers import EmployeeSerializer
 from .services import auth_login, auth_logout
 
 # Create your views here.

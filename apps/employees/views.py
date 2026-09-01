@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.assignments.models import EmployeeShiftAssignment
 from apps.assignments.serializers import EmployeeShiftAssignmentSerializer
 from apps.employees.models import Employee
-from apps.employees.serializers import EmployeeSerializer
+from apps.employees.serializers.serializers import EmployeeSerializer
 from apps.employees.services import EmployeeService
 
 # Create your views here.
@@ -37,15 +37,16 @@ class EmployeeView(GenericAPIView):
     def get(self, request):
         """Get /employees"""
         employees = self.service.fetch_employees_with_relations()
+        
         serializer = self.get_serializer(employees, many=True)
+
+        # TODO find a way to return shift assignment data, maybe separate function
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
 
         total_employees = Employee.objects.count()
         request.data["employee_number"] = f"EMP{total_employees + 1:05d}"
-
-        print(request.data)
 
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():

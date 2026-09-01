@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from apps.employees.models import Employee
-from apps.employees.serializers import EmployeeSerializer
+from apps.employees.serializers.serializers import EmployeeSerializer
 
 # Create your views here.
 

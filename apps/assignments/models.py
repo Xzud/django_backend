@@ -17,13 +17,13 @@ class EmployeeShiftAssignment(models.Model):
         "employees.Employee",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="shift_assignments",
+        related_name="employee_assignments",
     )
     shift = models.ForeignKey(
         "shifts.EmployeeShift",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="employee_assignments",
+        related_name="shift_assignments",
     )
     effective_from = models.DateField()
     effective_to = models.DateField(blank=True, null=True)
