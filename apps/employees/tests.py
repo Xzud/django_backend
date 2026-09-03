@@ -35,7 +35,6 @@ class EmployeeTest(CustomAPITestCase):
         )
 
         employee_detail = {
-            "employee_number": "EMP099",
             "user": user.id,
             "first_name": "Jane",
             "last_name": "Doe",
@@ -51,7 +50,8 @@ class EmployeeTest(CustomAPITestCase):
         self.assertEqual(user.id, 2)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["first_name"], employee_detail["first_name"])
-        # self.assertEqual(response.data["user"], employee_detail["user"]) # FIX test data inconsistency
+        # self.assertEqual(response.data["user"], employee_detail["user"]) 
+        # FIX test data inconsistency
 
     def test_put_employee(self):
         url = reverse("edit_employee", kwargs={"employee_id": 1})

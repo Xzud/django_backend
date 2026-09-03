@@ -50,7 +50,6 @@ def login(request):
     employee = Employee.objects.select_related("user", "department").get(
         user_id=user_details["id"]
     )
-    print(employee)
     serializer = EmployeeSerializer(employee)
 
     return Response(

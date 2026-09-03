@@ -1,18 +1,27 @@
 from django.utils import timezone
-from datetime import datetime
 
 from apps.employees.models import Employee
 from apps.employees.services import fetch_employee
 from apps.assignments.services import get_active_employee_shift_assignment
 from apps.shifts.models import EmployeeShift
+from .errors import EmployeeNotFoundError, NotAnEmployeeError
 
 from .models import Attendance
-
 
 def attendance_clockin(user_id, employee: Employee = None):
     if not employee:
         employee = fetch_employee(user_id=user_id)
 
+    if employee is None:
+        raise EmployeeNotFoundError(
+            f"No employee found for user_id={user_id}"
+        )
+
+    if not isinstance(employee, Employee):
+        raise NotAnEmployeeError(
+            f"Expected Employee, got {type(employee).__name__} instead."
+        )
+    
     clock_in = timezone.localtime()
 
     attendance = get_latest_attendance(employee.id)

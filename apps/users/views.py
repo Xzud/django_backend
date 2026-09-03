@@ -24,7 +24,6 @@ def auth_me(request):
         user_id=request.user.id
     )
 
-    print(employee)
     serializer = EmployeeSerializer(employee)
 
     return Response(

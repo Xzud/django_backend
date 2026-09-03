@@ -45,10 +45,11 @@ class EmployeeView(GenericAPIView):
 
     def post(self, request):
 
+        request_data = request.data.copy()
         total_employees = Employee.objects.count()
-        request.data["employee_number"] = f"EMP{total_employees + 1:05d}"
+        request_data["employee_number"] = f"EMP{total_employees + 1:05d}"
 
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request_data)
         if serializer.is_valid():
             employee = serializer.save()
             return Response(

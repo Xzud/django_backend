@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
+from .errors import EmployeeNotFoundError,NotAnEmployeeError
 
 from drf_spectacular.utils import extend_schema
 
@@ -16,7 +17,6 @@ from apps.attendance.services import (
     get_all_employee_attendance,
     get_latest_attendance,
 )
-from apps.employees.models import Employee
 from .models import Attendance
 
 # Create your views here.
@@ -33,10 +33,16 @@ class AttendanceClockInView(GenericAPIView):
 
     # POST /attendance/clock-in
     def post(self, request):
-        attendance = attendance_clockin(request.user.id)
-        return Response(
-            self.get_serializer(attendance).data, status=status.HTTP_201_CREATED
-        )
+        try:
+            attendance = attendance_clockin(request.user.id)
+            return Response(
+                self.get_serializer(attendance).data, status=status.HTTP_201_CREATED
+            )
+        
+        except (EmployeeNotFoundError, NotAnEmployeeError) as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class AttendanceClockOutView(GenericAPIView):
