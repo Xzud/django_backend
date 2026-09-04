@@ -33,3 +33,5 @@ class Command(BaseCommand):
                 f"Success on seeding {len(default_departments)} department/s"
             )
         )
+
+        # NOTE after departments have been seeded, consider using seed_assign_departments to fill seeded employees with appropriate departments
