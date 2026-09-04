@@ -14,7 +14,7 @@ class Command(BaseCommand):
         employees = Employee.objects.all()
 
         positions = [
-            {"name": "IT Administrator", "level": 999},
+            {"name": "IT Administrator", "level": 20},
             {"name": "Staff", "level": 10},
             {"name": "Manager", "level": 100},
         ]

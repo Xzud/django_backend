@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         try:
             with transaction.atomic():
-                for _, department in enumerate(default_departments):
+                for department in default_departments:
                     Department.objects.create(
                         name=department["name"], description=department["description"]
                     )

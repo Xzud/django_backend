@@ -9,11 +9,9 @@ from apps.employees.models import Employee
 
 
 class Command(BaseCommand):
-    help = "Seed the departments table"
+    help = "Seed the departments to assign on employees table"
 
     def handle(self, *args, **kwargs):
-        fake = Faker()
-
         departments = Department.objects.all()
         employees = Employee.objects.filter(department__isnull=True)
 
