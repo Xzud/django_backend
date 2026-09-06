@@ -14,7 +14,7 @@ from apps.assignments.models import EmployeeShiftAssignment
 from apps.assignments.serializers import EmployeeShiftAssignmentSerializer
 from apps.employees.models import Employee
 from apps.employees.serializers.serializers import EmployeeSerializer
-from apps.employees.services import EmployeeService
+from apps.employees.services import EmployeeService, fetch_employees_count
 
 # Create your views here.
 
@@ -154,3 +154,11 @@ def get_all_superiors(request):
     managers = Employee.objects.filter(position__level__gte=100)
     serializer = EmployeeSerializer(managers, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_total_employees_count(request):
+    employees_count = fetch_employees_count()
+    return Response({"count": employees_count}, status=status.HTTP_200_OK)
+

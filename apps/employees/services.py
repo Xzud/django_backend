@@ -1,7 +1,8 @@
-from time import timezone
+from django.utils import timezone
 
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 
+from apps.assignments.models import EmployeeShiftAssignment
 from apps.employees.models import Employee
 import logging
 
@@ -34,12 +35,21 @@ class EmployeeService:
 
     def fetch_employees_with_relations(self):
         """Fetch employees with their related user and department information"""
-        return (Employee.objects.select_related("user", "department")
-                # TODO find a way to return accurate shift assignment data, maybe separate function
-                # .prefetch_related("employee_assignments")
-                # .filter(employee_assignments__effective_from__lte=timezone.now())
-                # .filter(Q(employee_assignments__effective_to__gt=timezone.now()) | Q(employee_assignments__effective_to__isnull=True))
-                .all())
+        return (
+            Employee.objects.select_related("user", "department")
+            .prefetch_related(
+                Prefetch(
+                    "employee_assignments",
+                    queryset=EmployeeShiftAssignment.objects.filter(
+                        effective_from__lte=timezone.now()
+                    ).filter(
+                        Q(effective_to__gt=timezone.now())
+                        | Q(effective_to__isnull=True)
+                    ),
+                )
+            )
+            .all()
+        )
 
     def fetch_employee_with_relations_by_id(self, employee_id):
         """Fetch specific employee by id with related user and department infromation"""

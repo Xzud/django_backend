@@ -5,6 +5,7 @@ from apps.employees.views import (
     get_active_employee_shift,
     get_all_superiors,
     get_employee_shift,
+    get_total_employees_count,
 )
 
 # api/employees/
@@ -25,5 +26,6 @@ urlpatterns = [
         "superiors/",
         get_all_superiors,
         name="all_superiors"
-    )
+    ),
+    path("count/", get_total_employees_count, name="employees_count")
 ]
